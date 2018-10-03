@@ -6,9 +6,8 @@ const app = new Koa()
 const router = new Router()
 
 router.get('/imagesearch', (ctx, next) => {
-    console.log(JSON.stringify(ctx))
-    ctx.body = JSON.stringify(ctx)
-})
+    ctx.body = ctx.request.query.keyword
+    })
 
 router.post('/', (ctx, next) => {
     studentArray.push(JSON.parse(ctx.request.body))
