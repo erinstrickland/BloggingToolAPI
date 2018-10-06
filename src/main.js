@@ -7,23 +7,13 @@ const app = new Koa()
 const router = new Router()
 const pbKey = process.env.key
 
-router.get('/imagesearch', (ctx, next) => {
+router.get('/imagesearch', async (ctx, next) => {
     const searchTerm = ctx.request.query.keyword
-    rp(`http://www.pixabay.com/api/?key=${pbKey}&q=${searchTerm}&image_type=photo`)
-        .then((htmlString) => {
-            console.log(htmlString)
-            ctx.body = htmlString
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    const htmlString = await rp(`http://www.pixabay.com/api/?key=${pbKey}&q=${searchTerm}&image_type=photo`).catch((err) => { console.log(err) })
+    const imageList = JSON.parse(htmlString)
+    const display = imageList.hits.map(image => image.webformatURL)
+    ctx.body = display
 })
-
-router.post('/', (ctx, next) => {
-    studentArray.push(JSON.parse(ctx.request.body))
-})
-
-
 
 app.use(koaBody())
 
